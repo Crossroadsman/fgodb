@@ -10,7 +10,9 @@ models = [
     models.Kind,
     models.Group,
     models.GpTier,
-    models.Servant_X_GpTier
+    models.Servant_X_GpTier,
+    models.CommandCard,
+    models.Servant_X_CommandCard,
 ]
 
 for model in models:

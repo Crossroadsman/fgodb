@@ -21,7 +21,10 @@ class Servant(models.Model):
     base_attack = models.IntegerField()
     max_attack = models.IntegerField()
     base_hp = models.IntegerField()
-    max_attack = models.IntegerField()
+    max_hp = models.IntegerField()
+
+    def __str__(self):
+        return f'{self.name} ({self.kind})'
 
 
 class RarityManager(models.Manager):
@@ -56,11 +59,21 @@ class Rarity(models.Model):
 
     objects = RarityManager()
 
+    def __str__(self):
+        stars = "*" * self.rating
+        return stars
+
+    class Meta:
+        verbose_name_plural = 'Rarities'  # used by django admin
+
 
 class Kind(models.Model):
     """`Class` in FGO parlance (but a builtin keyword in python)"""
     
     name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
 
 
 class Group(models.Model):
@@ -69,12 +82,18 @@ class Group(models.Model):
     """
     name = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.name
+
 
 class GpTier(models.Model):
     """The servant's `tier` value as determined by grandorder.gamepress.gg
     """
     rating = models.IntegerField()
     description = models.TextField()
+
+    def __str__(self):
+        return str(self.rating)
 
 
 class Servant_X_GpTier(models.Model):
@@ -87,4 +106,29 @@ class Servant_X_GpTier(models.Model):
         'GpTier',
         on_delete=models.CASCADE
     )
+
+    def __str__(self):
+        return f'{self.servant} X {self.gp_tier}'
+
+
+class CommandCard(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+
+class Servant_X_CommandCard(models.Model):
+    """The MTM through table for Servant and CommandCard"""
+    servant = models.ForeignKey(
+        'Servant',
+        on_delete=models.CASCADE
+    )
+    command_card = models.ForeignKey(
+        'CommandCard',
+        on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return f'{self.servant} X {self.command_card}'
 
