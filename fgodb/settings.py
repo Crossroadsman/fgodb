@@ -123,5 +123,33 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
-
+'''ASK 20181106
+Note that there are three constants to handle static file locations
+(See the Django docs for more details, and also this SO entry:
+https://stackoverflow.com/questions/24022558/differences-between-staticfiles-dir-static-root-and-media-root
+).
+Simply put, the three locations have the following characteristics:
+12345678901234567890123456789012345678901234567890123456789012345678901234567890
+`STATIC_URL`       - this describes the URL prefix for referring to those static
+                     files that will be located in `STATIC_ROOT`. Examples:
+                     "/static/" or
+                     "http://static.thissite.com/"
+`STATICFILES_DIRS` - this is the list of other folders in the project hierarchy
+                     where static files can be found (typically project-level
+                     files).
+`STATIC_ROOT`      - this is the folder where static files should be served 
+                     once the project is deployed.
+                     The `collectstatic` management command copies files from
+                     all registered static folders into this folder to provide
+                     a single location from which a webserver like Apache or
+                     nginx can serve the files.
+                     NOTE: this cannot be the same folder as one in the
+                     STATICFILES_DIRS list. In the Django documentation, the
+                     example STATIC_ROOT is not even in the Django project 
+                     folder hierarchy (they use `/var/www/example.com/static`)
+'''
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    STATIC_DIR,
+]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
